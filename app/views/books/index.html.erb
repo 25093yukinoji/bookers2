@@ -1,12 +1,54 @@
-<% @books.each do |book| %>
-<div>
-  <%= link_to book_path(book.id) do %>
-    <%= attachment_image_tag book, :image %>
+<head>
+  <title>WebcampBackendNew</title>
+</head>
+
+
+  <p id="notice"></p>
+  <h1 >Books</h1>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Body</th>
+        <th></th>
+      </tr>
+    </thead>
+   <tbody>
+    <% @books.each do |book| %>
+      <tr>
+        <td>
+          <%= book.title %>
+        </td>
+        <td>
+          <%= book.body %>
+        </td>
+        <td>
+          <%= link_to "show", book_path(book.id) %>
+          <%= link_to "edit", edit_book_path(book.id) %>
+          <%= link_to "destroy", book_path(book), method: :delete, "data-confirm" => "Are you sure?" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+
+  <h2>New book</h2>
+  <% if @book.errors.any? %>
+  <%= @book.errors.count %>errors
+  <% @book.errors.full_messages.each do |message| %>
+  <%= message %>
   <% end %>
-    <p>投稿ユーザー画像：<%= image_tag('sample-author1.jpg') %></p>
-    <p>Title：<%= @book.title %></p>
-    <p>Opinion：<%= @book.body %></p>
-    <p>ユーザーネーム：<%= @book.user.name %></p>
-</div>
-<% end %>
-books/index
+  <% end %>
+  <%= form_for(@book) do |f| %>
+
+  <p class="index-title">Title</p>
+  <%=f.text_field :title %>
+
+  <p class="index-body">Body</p>
+  <%= f.text_area :body %>
+
+  <br><%= f.submit 'Create Book' %></br>
+  <% end %>
+  <%= paginate @books %>
